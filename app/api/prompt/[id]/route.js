@@ -20,12 +20,14 @@ export const PATCH = async (request, { params }) => {
   try {
     await connectToDB();
 
+    // Find the existing prompt by ID
     const existingPrompt = await Prompt.findById(params.id);
 
     if (!existingPrompt) {
       return new Response("Prompt not found", { status: 404 });
     }
 
+    // Update the prompt with new data
     existingPrompt.prompt = prompt;
     existingPrompt.tag = tag;
 
@@ -40,7 +42,9 @@ export const PATCH = async (request, { params }) => {
 export const DELETE = async (request, { params }) => {
   try {
     await connectToDB();
-    await Prompt.findByIdAndDelete(params.id);
+
+    // Find the prompt by ID and remove it
+    await Prompt.findByIdAndRemove(params.id);
 
     return new Response("Prompt deleted successfully", { status: 200 });
   } catch (error) {

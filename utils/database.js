@@ -13,6 +13,7 @@ export const connectToDB = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URI, {
       dbName: "promptopia",
+      useUnifiedTopology: true,
     });
 
     isConnected = true;
