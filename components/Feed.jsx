@@ -1,7 +1,5 @@
 "use client";
-
-import { useState, useEffect } from "react";
-
+import React, { useState, useEffect } from "react";
 import PromptCard from "./PromptCard";
 
 const PromptCardList = ({ data, handleTagClick }) => {
@@ -20,17 +18,22 @@ const PromptCardList = ({ data, handleTagClick }) => {
 
 const Feed = () => {
   const [allPosts, setAllPosts] = useState([]);
-
-  // Search states
   const [searchText, setSearchText] = useState("");
   const [searchTimeout, setSearchTimeout] = useState(null);
   const [searchedResults, setSearchedResults] = useState([]);
 
   const fetchPosts = async () => {
-    const response = await fetch("/api/prompt");
-    const data = await response.json();
-
-    setAllPosts(data);
+    try {
+      const response = await fetch("/api/prompt");
+      if (response.ok) {
+        const data = await response.json();
+        setAllPosts(data);
+      } else {
+        console.error("Failed to fetch prompts");
+      }
+    } catch (error) {
+      console.error("Error fetching prompts:", error);
+    }
   };
 
   useEffect(() => {
@@ -38,7 +41,7 @@ const Feed = () => {
   }, []);
 
   const filterPrompts = (searchtext) => {
-    const regex = new RegExp(searchtext, "i"); // 'i' flag for case-insensitive search
+    const regex = new RegExp(searchtext, "i");
     return allPosts.filter(
       (item) =>
         regex.test(item.creator.username) ||
