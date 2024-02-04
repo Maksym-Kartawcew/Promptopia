@@ -24,7 +24,13 @@ const Home = () => {
 
   const fetchPosts = async () => {
     try {
-      const response = await fetch("/api/prompt");
+      const response = await fetch("/api/prompt", {
+        headers: {
+          "Cache-Control": "no-cache, no-store, must-revalidate",
+          Pragma: "no-cache",
+          Expires: "0",
+        },
+      });
       if (response.ok) {
         const data = await response.json();
         setAllPosts(data);
